@@ -1,5 +1,7 @@
 # Gitim
 
+[![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
+
 ```
          .--.         .--. __  __   ___
   .--./) |__|         |__||  |/  `.'   `.
@@ -39,4 +41,4 @@ Verdiğiniz dizine klonlar
 Auth token. Şifre ile doğrulamanın alternatifi olarak kullanabilirsiniz.
 
 ##### Licence
-Not decided
+MIT
