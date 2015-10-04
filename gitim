@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+'''
+  @Author: Mustafa Hastürk
+  mustafa.hasturk@yandex.com
+'''
+__version = "1.0"
+
+from github import Github
+from github.GithubException import *
+
+import argparse
+import getpass
+import os
+import subprocess
+
+class Gitim():
+  def __init__(self):
+    print("""
+         .--.         .--. __  __   ___
+  .--./) |__|         |__||  |/  `.'   `.
+ /.''\\  .--.     .|  .--.|   .-.  .-.   '
+| |  | | |  |   .' |_ |  ||  |  |  |  |  |
+ \`-' /  |  | .'     ||  ||  |  |  |  |  |
+ /("'`   |  |'--.  .-'|  ||  |  |  |  |  |
+ \ '---. |  |   |  |  |  ||  |  |  |  |  |
+  /'""'.\|__|   |  |  |__||__|  |__|  |__|
+ ||     ||      |  '.'
+ \'. __//       |   /
+  `'---'        `'-'
+
+created by \033[87m'Mustafa Hastürk'\033[0m
+
+Git depolarınızı klonlayabileceğiniz araç.
+Versiyon: 0.1
+""")
+
+
+  def set_args(self):
+    '''Create parser for command line arguments'''
+    parser = argparse.ArgumentParser(
+      usage="""
+
+  'python3 gitim -u'
+  \t\t\tTerminal sizden kullanıcı adı ve şifrenizi isteyecektir.
+
+  'python3 gitim -u muhasturk -p şifrem'
+  \t\t\t-p argümanı verildiğinde şifreniz ekranda gözükür.
+
+  'python3 gitim -u muhasturk -p şifrem -d ../github/depolarım/'
+  \t\t\t-d argümanı ile depoları kaydedeceğiniz dizini verebilirsiniz.""",
+  description="""
+
+  Gizli depolarınız dahil github hesabınızdaki tüm depolarınızı klonlayın.""")
+    parser.add_argument('-u', '--user', help="Your github username")
+    parser.add_argument('-p', '--password', help="Github hesabınızın şifresi. Ekranda gözükür!"
+                                                 "Gözükmesini istemiyorsanız sadece kullanıcı adı girerek devam edin")
+    parser.add_argument('-t', '--token',
+      help="OAuth token. Şifre ile doğrulamanın alternatifi olarak kullanabilirsiniz.")
+    parser.add_argument('-d', '--dest',
+      help="Depoların klonlanacağı dizini ifade eder. Varsayılan olarak şuan bulunduğunuz dizindir.")
+    parser.add_argument('--nopull', action='store_true',
+      help="Önceden klonlanmış depoları güncelleme özelliğini etkisiz hale getirir. (Varsayılan: false)")
+    return parser
+
+  def make_github_agent(self, args):
+    '''Create github agent to auth'''
+    if args.token:
+      g = Github(args.token)
+    else:
+      user = args.user
+      password = args.password
+      if not user:
+        user = input('Kullanıcı Adınız: ')
+      if not password:
+        password = getpass.getpass('Şifreniz (Ekranda Gözükmez!): ')
+      if not args.dest:
+        args.dest = input('Klonlanacak dizin: (Varsayılan ./):\t')
+      g = Github(user, password)
+    return g
+
+  def clone_main(self):
+    ''' Clone all repos '''
+    parser = self.set_args()
+    args = parser.parse_args()
+    g = self.make_github_agent(args)
+    try:
+      user = g.get_user().login
+    except BadCredentialsException as e:
+      print("Giriş bilgileriniz hatalı, kontrol edip tekrar deneyin!")
+    except TwoFactorException as e:
+      print("Two-Factor Authentication için tek kullanımlık şifre gerekli.")
+    except RateLimitExceededException as e:
+      print("Rate limit aşıldı.")
+
+    else:
+      if args.dest:
+        try:
+          os.chdir(args.dest)
+        except FileNotFoundError as e:
+          print("Dizin bulunamadı\t",e.args)
+
+      repos = g.get_user().get_repos().totalCount
+      print("Toplam deponuz:\t{}".format(repos))
+
+      for repo in g.get_user().get_repos():
+        if repo.full_name.startswith(user):
+          if not os.path.exists(repo.name):
+            print(repo.full_name)
+            subprocess.call(["git", "clone",
+                           "https://github.com/" + repo.full_name])
+          elif not args.nopull:
+            print("Updating " + repo.name)
+            os.chdir(repo.name)
+            subprocess.call(["git", "pull"])
+            os.chdir(os.pardir)
+          else:
+            print("Zaten klonlanmış, atlanıyor...\t" + repo.name)
+
+      print("\n'\033[94m'Herşey yolunda gitti ve tüm depolarınız vermiş olduğunuz dizini klonlandı.")
+
+if __name__ == '__main__':
+  gitim = Gitim()
+  gitim.clone_main()
+
+
+
