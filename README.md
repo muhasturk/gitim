@@ -1,6 +1,7 @@
 # Gitim
 
-[![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
+[![GitHub license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT) 
+[![Python Version](https://img.shields.io/badge/python-3.5-blue.svg)](https://docs.python.org/3.5/whatsnew/changelog.html#python-3-5-0-final)
 
 ```
          .--.         .--. __  __   ___
