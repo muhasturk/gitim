@@ -1,23 +1,30 @@
-#!/usr/bin/env python3
-'''
-  @Author: Mustafa Hastürk
-  mustafa.hasturk@yandex.com
-'''
+#!/usr/bin/env python
+# -*- coding: utf8 -*-
 
-from github import Github
-from github.GithubException import *
+from __future__ import unicode_literals
+from platform import python_version_tuple
+from sys import stdin
 
 import argparse
 import getpass
 import os
 import subprocess
 
-class Gitim():
+from github import Github
+from github.GithubException import *
 
-  __version = "1.0.1"
+if python_version_tuple()[0] == u'2':
+    input = lambda prompt: raw_input(prompt.encode('utf8')).decode('utf8')
+
+__author__ = u'"Mustafa Hastürk" <mustafa.hasturk@yandex.com>'
+__version__ = "1.0.1"
+
+class Gitim():
+  __version__ = __version__
+  __author__ = __author__
 
   def __init__(self):
-    print("""
+    print(u"""
          .--.         .--. __  __   ___
   .--./) |__|         |__||  |/  `.'   `.
  /.''\\  .--.     .|  .--.|   .-.  .-.   '
@@ -34,34 +41,34 @@ created by \033[87m'Mustafa Hastürk'\033[0m
 
 Git depolarınızı klonlayabileceğiniz araç.
 Versiyon: {}
-""".format(self.__version))
+""".format(self.__version__))
 
 
   def set_args(self):
     '''Create parser for command line arguments'''
     parser = argparse.ArgumentParser(
-      usage="""
+      usage=u"""
 
-  'python3 gitim -u'
+  u'python3 gitim -u'
   \t\t\tTerminal sizden kullanıcı adı ve şifrenizi isteyecektir.
 
-  'python3 gitim -u muhasturk -p şifrem'
+  u'python3 gitim -u muhasturk -p şifrem'
   \t\t\t-p argümanı verildiğinde şifreniz ekranda gözükür.
 
-  'python3 gitim -u muhasturk -p şifrem -d ../github/depolarım/'
+  u'python3 gitim -u muhasturk -p şifrem -d ../github/depolarım/'
   \t\t\t-d argümanı ile depoları kaydedeceğiniz dizini verebilirsiniz.""",
   description="""
 
   Gizli depolarınız dahil github hesabınızdaki tüm depolarınızı klonlayın.""")
     parser.add_argument('-u', '--user', help="Your github username")
-    parser.add_argument('-p', '--password', help="Github hesabınızın şifresi. Ekranda gözükür!"
-                                                 "Gözükmesini istemiyorsanız sadece kullanıcı adı girerek devam edin")
+    parser.add_argument('-p', '--password', help=u"Github hesabınızın şifresi. Ekranda gözükür!"
+                                                 u"Gözükmesini istemiyorsanız sadece kullanıcı adı girerek devam edin")
     parser.add_argument('-t', '--token',
-      help="OAuth token. Şifre ile doğrulamanın alternatifi olarak kullanabilirsiniz.")
+      help=u"OAuth token. Şifre ile doğrulamanın alternatifi olarak kullanabilirsiniz.")
     parser.add_argument('-d', '--dest',
-      help="Depoların klonlanacağı dizini ifade eder. Varsayılan olarak şuan bulunduğunuz dizindir.")
+      help=u"Depoların klonlanacağı dizini ifade eder. Varsayılan olarak şuan bulunduğunuz dizindir.")
     parser.add_argument('--nopull', action='store_true',
-      help="Önceden klonlanmış depoları güncelleme özelliğini etkisiz hale getirir. (Varsayılan: false)")
+      help=u"Önceden klonlanmış depoları güncelleme özelliğini etkisiz hale getirir. (Varsayılan: false)")
     return parser
 
   def make_github_agent(self, args):
@@ -72,11 +79,14 @@ Versiyon: {}
       user = args.user
       password = args.password
       if not user:
-        user = input('Kullanıcı Adınız: ')
+        user = input(u'Kullanıcı Adınız: ')
       if not password:
-        password = getpass.getpass('Şifreniz (Ekranda Gözükmez!): ')
+        password = getpass.getpass(u'Parola: ')
+        if isinstance(password, bytes):
+            password = password.decode(stdin.encoding)
+        password = password.encode('utf-8')
       if not args.dest:
-        args.dest = input('Klonlanacak dizin: (Varsayılan ./):\t')
+        args.dest = input(u'Klonlanacak dizin: (Varsayılan ./):\t')
       g = Github(user, password)
     return g
 
@@ -88,38 +98,35 @@ Versiyon: {}
     try:
       user = g.get_user().login
     except BadCredentialsException as e:
-      print("Giriş bilgileriniz hatalı, kontrol edip tekrar deneyin!")
+      print(u"Giriş bilgileriniz hatalı, kontrol edip tekrar deneyin!")
     except TwoFactorException as e:
-      print("Two-Factor Authentication için tek kullanımlık şifre gerekli.")
+      print(u"Two-Factor Authentication için tek kullanımlık şifre gerekli.")
     except RateLimitExceededException as e:
-      print("Rate limit aşıldı.")
+      print(u"Rate limit aşıldı.")
 
     else:
       if args.dest:
         if not os.path.exists(args.dest):
           os.makedirs(args.dest)
-          print("{} dizini oluşturuldu.".format(args.dest))
+          print(u"{} dizini oluşturuldu.".format(args.dest))
         os.chdir(args.dest)
 
       for repo in g.get_user().get_repos():
         if repo.full_name.startswith(user):
           if not os.path.exists(repo.name):
             print(repo.full_name)
-            subprocess.call(["git", "clone",
-                           "https://github.com/" + repo.full_name])
+            subprocess.call([u"git", u"clone",
+                           u"https://github.com/" + repo.full_name])
           elif not args.nopull:
-            print("Updating " + repo.name)
+            print(u"Updating " + repo.name)
             os.chdir(repo.name)
             subprocess.call(["git", "pull"])
             os.chdir(os.pardir)
           else:
-            print("Zaten klonlanmış, atlanıyor...\t" + repo.name)
+            print(u"Zaten klonlanmış, atlanıyor...\t" + repo.name)
 
-      print("\n'\033[94m'Herşey yolunda gitti ve tüm depolarınız vermiş olduğunuz dizini klonlandı.")
+      print(u"\n'\033[94m'Herşey yolunda gitti ve tüm depolarınız vermiş olduğunuz dizini klonlandı.")
 
 if __name__ == '__main__':
   gitim = Gitim()
   gitim.clone_main()
-
-
-
