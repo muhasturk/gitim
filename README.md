@@ -4,43 +4,37 @@
 [![Python Version][Python Image]][Python]
 ![Project Status: Active][Project Status Image]
 
-```
-         .--.         .--. __  __   ___
-  .--./) |__|         |__||  |/  `.'   `.
- /.''\\  .--.     .|  .--.|   .-.  .-.   '
-| |  | | |  |   .' |_ |  ||  |  |  |  |  |
- \`-' /  |  | .'     ||  ||  |  |  |  |  |
- /("'`   |  |'--.  .-'|  ||  |  |  |  |  |
- \ '---. |  |   |  |  |  ||  |  |  |  |  |
-  /'""'.\|__|   |  |  |__||__|  |__|  |__|
- ||     ||      |  '.'
- \'. __//       |   /
-  `'---'        `'-'
-```
+             .--.         .--. __  __   ___
+      .--./) |__|         |__||  |/  `.'   `.
+     /.''\  .--.     .|  .--.|   .-.  .-.   '
+    | |  | | |  |   .' |_ |  ||  |  |  |  |  |
+     \`-' /  |  | .'     ||  ||  |  |  |  |  |
+     /("'`   |  |'--.  .-'|  ||  |  |  |  |  |
+     \ '---. |  |   |  |  |  ||  |  |  |  |  |
+      /'""'.\|__|   |  |  |__||__|  |__|  |__|
+     ||     ||      |  '.'
+     '. __//       |   /
+      `'---'        `'-'
 
-Tüm Github hesabınızdaki depolarınızı istediğiniz dizine klonlayabileceğiniz veya eiştleyebileceğiniz bir araçtır.
+    created by "Mustafa Hasturk" <mustafa.hasturk@yandex.com>, "Samuel Marks"
+    Version: 1.0.2
 
-### Requirements
+    usage: 'python -m gitim -u'
+                Username and password will be prompted.
 
-```python
-pip install pygithub
-```
+    Clone all your Github repositories.
 
-### Usage
-```
-./gitim
-```
-
-#### Arguments
-
-* -u, --username KullaniciAdi 
-* -p, --password Şifreniz
-* --nopull       
-Daha önce klonlanmış depolarınızı güncellemez.
-* -d, --dest Dizin
-Verdiğiniz dizine klonlar
-* -t, --token TOKEN 
-Auth token. Şifre ile doğrulamanın alternatifi olarak kullanabilirsiniz.
+    optional arguments:
+      -h, --help            show this help message and exit
+      -u USER, --user USER  Your github username
+      -p PASSWORD, --password PASSWORD
+                            Github password
+      -t TOKEN, --token TOKEN
+                            Github OAuth token
+      -o ORG, --org ORG     Organisation/team. User used by default.
+      -d DEST, --dest DEST  Destination directory. Created if doesn't exist.
+                            [curr_dir]
+      --nopull              Don't pull if repository exists. [false]
 
 ##### Licence
 MIT
