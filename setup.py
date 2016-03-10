@@ -1,5 +1,9 @@
 from setuptools import setup, find_packages
-from itertools import imap, ifilter
+try:
+    from itertools import imap, ifilter
+except ImportError:
+    imap = map
+    ifilter = filter
 from os import path
 from ast import parse
 
