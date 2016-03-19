@@ -16,7 +16,7 @@
      '. __//       |   /
       `'---'        `'-'
 
-    created by "Mustafa Hasturk" <mustafa.hasturk@yandex.com>, "Samuel Marks"
+    created by "Mustafa Hasturk" <hi [at] mustafahasturk [dot] com>
     Version: 1.0.2
 
     usage: 'python -m gitim -u'
