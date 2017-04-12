@@ -48,6 +48,8 @@ Version: {__version__}
         parser.add_argument('-o', '--org', help=u'Organisation/team. User used by default.')
         parser.add_argument('-d', '--dest', help=u'Destination directory. Created if doesn\'t exist. [curr_dir]')
         parser.add_argument('--nopull', action='store_true', help=u'Don\'t pull if repository exists. [false]')
+        parser.add_argument('--shallow', action='store_true', help=u'Perform shallow clone. [false]')
+        parser.add_argument('--ssh', action='store_true', help=u'Use ssh+git urls for checkout. [false]')
         return parser
 
     def make_github_agent(self, args):
@@ -84,8 +86,15 @@ Version: {__version__}
         get_repos = g.get_organization(args.org).get_repos if args.org else g.get_user().get_repos
         for repo in get_repos():
             if not path.exists(join(repo.name)):
-                print(u'Cloning "{repo.full_name}"'.format(repo=repo))
-                call([u'git', u'clone', repo.clone_url, join(repo.name)])
+                clone_url = repo.clone_url
+                if args.ssh:
+                    clone_url = repo.ssh_url
+                if args.shallow:
+                    print(u'Shallow cloning "{repo.full_name}"'.format(repo=repo))
+                    call([u'git', u'clone', '--depth=1', clone_url, join(repo.name)])
+                else:
+                    print(u'Cloning "{repo.full_name}"'.format(repo=repo))
+                    call([u'git', u'clone', clone_url, join(repo.name)])
             elif not args.nopull:
                 print(u'Updating "{repo.name}"'.format(repo=repo))
                 call([u'git', u'pull'], env=dict(environ, GIT_DIR=join(repo.name, '.git').encode('utf8')))
