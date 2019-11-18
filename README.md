@@ -4,6 +4,9 @@
 [![Python Version][Python Image]][Python]
 ![Project Status: Active][Project Status Image]
 
+Clone all your Github repositories.
+
+
              .--.         .--. __  __   ___
       .--./) |__|         |__||  |/  `.'   `.
      /.''\  .--.     .|  .--.|   .-.  .-.   '
@@ -15,28 +18,37 @@
      ||     ||      |  '.'
      '. __//       |   /
       `'---'        `'-'
-
-    created by "Mustafa Hasturk"
-
-    Clone all your Github repositories.
-
+      
+## Installation
+```
+pip3 install . 
+```
+or
+```
+python3 setup.py install
+```
 
 
 ### Usage
 `'python -m gitim'`
+
 Username and password will be prompted.
 
 #### Optional Arguments
-      -h, --help            show this help message and exit
-      -u USER, --user USER  Your github username
-      -p PASSWORD, --password PASSWORD
-                            Github password
-      -t TOKEN, --token TOKEN
-                            Github OAuth token
-      -o ORG, --org ORG     Organisation/team. User used by default.
-      -d DEST, --dest DEST  Destination directory. Created if doesn't exist.
-                            [curr_dir]
-      --nopull              Don't pull if repository exists. [false]
+```
+  -h, --help            show this help message and exit
+  -u USER, --user USER  Your github username
+  -p PASSWORD, --password PASSWORD
+                        Github password
+  -t TOKEN, --token TOKEN
+                        Github OAuth token
+  -o ORG, --org ORG     Organisation/team. User used by default.
+  -d DEST, --dest DEST  Destination directory. Created if doesn't exist.
+                        [curr_dir]
+  --nopull              Don't pull if repository exists. [false]
+  --shallow             Perform shallow clone. [false]
+  --ssh                 Use ssh+git urls for checkout. [false]
+```
 
 ##### Licence
 MIT
