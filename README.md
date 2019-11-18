@@ -18,8 +18,9 @@ Clone all your Github repositories.
      ||     ||      |  '.'
      '. __//       |   /
       `'---'        `'-'
-      
+
 ## Installation
+
 ```
 pip3 install . 
 ```
@@ -30,11 +31,21 @@ python3 setup.py install
 
 
 ### Usage
-`'python -m gitim'`
+
+```
+python -m gitim
+```
 
 Username and password will be prompted.
 
+If you want to download organization repositories
+
+```
+python3 -m gitim -o <Organization> -d <Directory>
+```
+
 #### Optional Arguments
+
 ```
   -h, --help            show this help message and exit
   -u USER, --user USER  Your github username
