@@ -16,15 +16,17 @@
      '. __//       |   /
       `'---'        `'-'
 
-    created by "Mustafa Hasturk" <hi [at] mustafahasturk [dot] com>
-    Version: 1.0.2
-
-    usage: 'python -m gitim -u'
-                Username and password will be prompted.
+    created by "Mustafa Hasturk"
 
     Clone all your Github repositories.
 
-    optional arguments:
+
+
+### Usage
+`'python -m gitim'`
+Username and password will be prompted.
+
+#### Optional Arguments
       -h, --help            show this help message and exit
       -u USER, --user USER  Your github username
       -p PASSWORD, --password PASSWORD

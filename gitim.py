@@ -14,7 +14,7 @@ from github import Github
 if python_version_tuple()[0] == u'2':
     input = lambda prompt: raw_input(prompt.encode('utf8')).decode('utf8')
 
-__author__ = u'"Samuel Marks", "Mustafa Hasturk" <mustafa.hasturk@yandex.com>'
+__author__ = u'"Mustafa Hasturk"'
 __version__ = '2.0.0'
 
 
@@ -40,7 +40,7 @@ Version: {__version__}
     def set_args(self):
         """ Create parser for command line arguments """
         parser = ArgumentParser(
-                usage=u'python -m gitim -u\'\n\t\t\tUsername and password will be prompted.',
+                usage=u'python -m gitim \'\nUsername and password will be prompted.',
                 description='Clone all your Github repositories.')
         parser.add_argument('-u', '--user', help='Your github username')
         parser.add_argument('-p', '--password', help=u'Github password')
