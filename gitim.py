@@ -85,7 +85,7 @@ Version: {__version__}
 
         get_repos = g.get_organization(args.org).get_repos if args.org else g.get_user().get_repos
         for repo in get_repos():
-            if not path.exists(join(repo.name)):
+            if not path.exists(join(repo.full_name)):
                 clone_url = repo.clone_url
                 if args.ssh:
                     clone_url = repo.ssh_url
@@ -97,7 +97,7 @@ Version: {__version__}
                     call([u'git', u'clone', clone_url, join(repo.full_name)])
             elif not args.nopull:
                 print(u'Updating "{repo.name}"'.format(repo=repo))
-                call([u'git', u'pull'], env=dict(environ, GIT_DIR=join(repo.name, '.git').encode('utf8')))
+                call([u'git', u'pull'], env=dict(environ, GIT_DIR=join(repo.full_name, '.git').encode('utf8')))
             else:
                 print(u'Already cloned, skipping...\t"{repo.full_name}"'.format(repo=repo))
         print(u'FIN')
