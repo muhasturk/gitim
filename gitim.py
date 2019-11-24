@@ -89,6 +89,9 @@ Version: {__version__}
                 clone_url = repo.clone_url
                 if args.ssh:
                     clone_url = repo.ssh_url
+                elif not args.token:
+                    if user != "":
+                        clone_url = clone_url.replace("://github.com/","://"+user+"@github.com/")
                 if args.shallow:
                     print(u'Shallow cloning "{repo.full_name}"'.format(repo=repo))
                     call([u'git', u'clone', '--depth=1', clone_url, join(repo.full_name)])
