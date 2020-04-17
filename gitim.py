@@ -50,6 +50,7 @@ Version: {__version__}
         parser.add_argument('--nopull', action='store_true', help=u'Don\'t pull if repository exists. [false]')
         parser.add_argument('--shallow', action='store_true', help=u'Perform shallow clone. [false]')
         parser.add_argument('--ssh', action='store_true', help=u'Use ssh+git urls for checkout. [false]')
+        parser.add_argument('--noforks', action='store_true', help=u'Skip forked repositories. [false]')
         return parser
 
     def make_github_agent(self, args):
@@ -85,7 +86,9 @@ Version: {__version__}
 
         get_repos = g.get_organization(args.org).get_repos if args.org else g.get_user().get_repos
         for repo in get_repos():
-            if not path.exists(join(repo.name)):
+            if args.noforks and repo.fork:
+                print(u'Repo "{repo.full_name}" is a fork, skipping'.format(repo=repo))
+            elif not path.exists(join(repo.name)):
                 clone_url = repo.clone_url
                 if args.ssh:
                     clone_url = repo.ssh_url
