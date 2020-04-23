@@ -28,7 +28,11 @@ or
 ```
 python3 setup.py install
 ```
+or get it as the [archlinux aur package](https://aur.archlinux.org/packages/python-gitim-git/):
 
+```
+yaourt -S python-gitim-git
+```
 
 ### Usage
 
