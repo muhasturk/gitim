@@ -88,10 +88,13 @@ Version: {__version__}
         for repo in get_repos():
             if args.noforks and repo.fork:
                 print(u'Repo "{repo.full_name}" is a fork, skipping'.format(repo=repo))
-            elif not path.exists(join(repo.name)):
+            elif not path.exists(join(repo.full_name)):
                 clone_url = repo.clone_url
                 if args.ssh:
                     clone_url = repo.ssh_url
+                elif not args.token:
+                    if user != "":
+                        clone_url = clone_url.replace("://github.com/","://"+user+"@github.com/")
                 if args.shallow:
                     print(u'Shallow cloning "{repo.full_name}"'.format(repo=repo))
                     call([u'git', u'clone', '--depth=1', clone_url, join(repo.full_name)])
@@ -100,7 +103,7 @@ Version: {__version__}
                     call([u'git', u'clone', clone_url, join(repo.full_name)])
             elif not args.nopull:
                 print(u'Updating "{repo.name}"'.format(repo=repo))
-                call([u'git', u'pull'], env=dict(environ, GIT_DIR=join(repo.name, '.git').encode('utf8')))
+                call([u'git', u'pull'], env=dict(environ, GIT_DIR=join(repo.full_name, '.git').encode('utf8')))
             else:
                 print(u'Already cloned, skipping...\t"{repo.full_name}"'.format(repo=repo))
         print(u'FIN')
